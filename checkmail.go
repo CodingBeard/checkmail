@@ -46,6 +46,16 @@ func ValidateFormat(email string) error {
 
 func ValidateHost(email string) error {
 	_, host := split(email)
+	_, err := net.LookupMX(host)
+	if err != nil {
+		return ErrUnresolvableHost
+	}
+
+	return nil
+}
+
+func ValidateInbox(email string) error {
+	_, host := split(email)
 	mx, err := net.LookupMX(host)
 	if err != nil {
 		return ErrUnresolvableHost
